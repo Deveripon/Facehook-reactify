@@ -1,9 +1,14 @@
-import Header from "../components/common/Header";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
         <>
-            <Header />
+            <h1>Home Page</h1>
+            <Link
+                to='/profile'
+                className='bg-gray-300 p-2 rounded'>
+                Profile
+            </Link>
         </>
     );
 };

@@ -1,18 +1,30 @@
 import { Route, Routes } from "react-router-dom";
+import useAuth from "./hooks/useAuth";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Registration from "./pages/Registration";
+import PrivetRoutes from "./routes/PrivetRoutes";
 export default function App() {
+    const { auth } = useAuth();
     return (
         <Routes>
-            <Route
-                path='/'
-                element={<Home />}
-                errorElement={<ErrorPage />}
-                exact
-            />
+            {/* privet routes */}
+            <Route element={<PrivetRoutes />}>
+                <Route
+                    path='/'
+                    element={<Home />}
+                    errorElement={<ErrorPage />}
+                    exact
+                />
+                <Route
+                    path='/profile'
+                    element={<Profile />}
+                />
+            </Route>
+
+            {/* //public routes */}
             <Route errorElement={<ErrorPage />} />
             <Route
                 path='/login'
@@ -21,10 +33,6 @@ export default function App() {
             <Route
                 path='/register'
                 element={<Registration />}
-            />
-            <Route
-                path='/profile'
-                element={<Profile />}
             />
             <Route
                 path='*'
