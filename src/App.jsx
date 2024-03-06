@@ -25,7 +25,7 @@ export default function App() {
             </Route>
 
             {/* //public routes */}
-            <Route errorElement={<ErrorPage />} />
+
             <Route
                 path='/login'
                 element={<Login />}
@@ -34,6 +34,9 @@ export default function App() {
                 path='/register'
                 element={<Registration />}
             />
+
+            <Route errorElement={<ErrorPage />} />
+
             <Route
                 path='*'
                 element={<ErrorPage />}

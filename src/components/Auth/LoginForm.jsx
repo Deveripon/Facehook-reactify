@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
@@ -10,20 +11,47 @@ const LoginForm = () => {
         handleSubmit,
         formState: { errors, isLoading, isSubmitting },
         reset,
+        setError,
     } = useForm();
 
-    const handleFormSubmit = (data) => {
-        console.log(data);
-        const user = { ...data };
-        setAuth({ user });
-        reset();
-        navigate("/");
+    const handleFormSubmit = async (formData) => {
+        console.log(formData);
+
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
+                formData
+            );
+            const { user, token } = await response.data;
+            if (token) {
+                const authToken = token.token;
+                const refreshToken = token.refreshToken;
+                console.log(`logintime authToken: ${authToken}`);
+                setAuth({
+                    user,
+                    authToken,
+                    refreshToken,
+                });
+            }
+
+            reset();
+            navigate("/");
+        } catch (error) {
+            setError("root.error", {
+                type: "error",
+                message: error.message,
+            });
+        }
     };
 
     return (
         <form
             onSubmit={handleSubmit(handleFormSubmit)}
             className='border-b border-[#3F3F3F] pb-10 lg:pb-[60px]'>
+            <p className='text-red-500 font-semibold'>
+                {errors?.root?.error.message ? "Invalid Cridentials" : ""}
+            </p>
+
             <Field
                 label='Email'
                 error={!!errors && errors.email}>
